@@ -1,0 +1,6 @@
+videos/
+events/
+__pycache__/
+*.pyc
+config/secrets.py
+*.db
