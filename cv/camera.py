@@ -31,6 +31,17 @@ def read_frame(cap):
     return None
 
 
+# Scales the frame down proportionally so its width is at most width, keeping aspect ratio.
+def resize_frame(frame, width=960):
+    if frame is None:
+        return None
+    h, w = frame.shape[:2]
+    if w <= width:
+        return frame
+    new_height = int(h * (width / w))
+    return cv2.resize(frame, (width, new_height))
+
+
 # Releases the capture object and closes all OpenCV windows.
 def close(cap):
     if cap is not None:
@@ -54,6 +65,7 @@ if __name__ == "__main__":
         if frame is None:
             break
         frame_count += 1
+        frame = resize_frame(frame)
         cv2.imshow("VisionSOS", frame)
         if cv2.waitKey(30) & 0xFF == ord("q"):
             break
