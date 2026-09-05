@@ -70,6 +70,8 @@ if __name__ == "__main__":
         source = 0
 
     cap = camera.open_source(source)
+    cv2.namedWindow("VisionSOS - Movement", cv2.WINDOW_NORMAL)
+    cv2.resizeWindow("VisionSOS - Movement", 640, 480)
     prev_points = None
     frame_count = 0
 
@@ -93,6 +95,12 @@ if __name__ == "__main__":
         )
 
         frame = pose.draw(frame, landmarks)
+
+        h, w = frame.shape[:2]
+        if w > 640:
+            new_height = int(h * (640 / w))
+            frame = cv2.resize(frame, (640, new_height))
+
         cv2.imshow("VisionSOS - Movement", frame)
         if cv2.waitKey(30) & 0xFF == ord("q"):
             break

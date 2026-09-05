@@ -14,11 +14,13 @@ except ImportError:
     import movement
 
 # Constants
-ANGLE_THRESHOLD = 60
-GAP_THRESHOLD = 0.10
+ANGLE_THRESHOLD = 45
+GAP_THRESHOLD = 0.25
 MOTION_THRESHOLD = 0.005
-STILLNESS_SECONDS = 5
+STILLNESS_SECONDS = 3
 FPS = 25
+ANGLE_JUMP = 15
+SUSTAINED_FRAMES = 30
 
 # Module level state variables
 state = "NORMAL"
@@ -26,11 +28,13 @@ prev_points = None
 still_frames = 0
 prev_angle = 0.0
 fired = False
+horizontal_frames = 0
+trigger_reason = None
 
 
 # Updates the fall detection state machine with new landmarks and frame, returning an event if triggered and current status.
 def update(landmarks, frame):
-    global state, prev_points, still_frames, prev_angle, fired
+    global state, prev_points, still_frames, prev_angle, fired, horizontal_frames, trigger_reason
 
     if landmarks is None:
         return None, {"state": state, "countdown": None}
@@ -39,12 +43,22 @@ def update(landmarks, frame):
     gap = movement.head_ankle_gap(landmarks)
     motion, prev_points = movement.motion_energy(landmarks, prev_points)
 
+    if angle > ANGLE_THRESHOLD and gap < GAP_THRESHOLD:
+        horizontal_frames += 1
+    else:
+        horizontal_frames = 0
+
     event = None
 
     if state == "NORMAL":
-        if angle > ANGLE_THRESHOLD and gap < GAP_THRESHOLD and (angle - prev_angle) > 30:
+        if angle > ANGLE_THRESHOLD and gap < GAP_THRESHOLD and (angle - prev_angle) > ANGLE_JUMP:
             state = "FALL_SUSPECTED"
             still_frames = 0
+            trigger_reason = "sudden_drop"
+        elif horizontal_frames >= SUSTAINED_FRAMES:
+            state = "FALL_SUSPECTED"
+            still_frames = 0
+            trigger_reason = "sustained_horizontal"
     elif state == "FALL_SUSPECTED":
         if angle < ANGLE_THRESHOLD:
             state = "NORMAL"
@@ -68,6 +82,7 @@ def update(landmarks, frame):
                     "motion_energy": motion,
                     "fall_velocity": abs(angle - prev_angle) * FPS,
                     "snapshot_frame": frame,
+                    "trigger": trigger_reason,
                 }
 
     prev_angle = angle
@@ -86,12 +101,14 @@ def update(landmarks, frame):
 
 # Resets all state variables back to their starting values.
 def reset():
-    global state, prev_points, still_frames, prev_angle, fired
+    global state, prev_points, still_frames, prev_angle, fired, horizontal_frames, trigger_reason
     state = "NORMAL"
     prev_points = None
     still_frames = 0
     prev_angle = 0.0
     fired = False
+    horizontal_frames = 0
+    trigger_reason = None
 
 
 if __name__ == "__main__":
@@ -116,6 +133,9 @@ if __name__ == "__main__":
     if cap is None:
         print(f"ERROR: could not open {source}")
         sys.exit(1)
+
+    cv2.namedWindow("VisionSOS - Fall Detection", cv2.WINDOW_NORMAL)
+    cv2.resizeWindow("VisionSOS - Fall Detection", 640, 480)
 
     frame_count = 0
 
@@ -153,12 +173,17 @@ if __name__ == "__main__":
         if status["countdown"] is not None:
             state_text += f" ({status['countdown']:.1f}s)"
 
+        h, w = frame.shape[:2]
+        if w > 640:
+            new_height = int(h * (640 / w))
+            frame = cv2.resize(frame, (640, new_height))
+
         cv2.putText(
             frame,
             state_text,
             (30, 50),
             cv2.FONT_HERSHEY_SIMPLEX,
-            1.0,
+            0.6,
             color,
             2,
             cv2.LINE_AA,

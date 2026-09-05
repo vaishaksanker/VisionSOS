@@ -40,6 +40,8 @@ if __name__ == "__main__":
         source = 0
 
     cap = camera.open_source(source)
+    cv2.namedWindow("VisionSOS - Pose", cv2.WINDOW_NORMAL)
+    cv2.resizeWindow("VisionSOS - Pose", 640, 480)
     frame_count = 0
 
     while True:
@@ -50,6 +52,11 @@ if __name__ == "__main__":
         frame_count += 1
         landmarks = get_landmarks(frame)
         frame = draw(frame, landmarks)
+
+        h, w = frame.shape[:2]
+        if w > 640:
+            new_height = int(h * (640 / w))
+            frame = cv2.resize(frame, (640, new_height))
 
         cv2.imshow("VisionSOS - Pose", frame)
         if cv2.waitKey(30) & 0xFF == ord("q"):
