@@ -3,7 +3,13 @@ import mediapipe as mp
 
 # Initialize MediaPipe Pose and drawing utilities once at module level
 mp_pose = mp.solutions.pose
-pose = mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5)
+pose = mp_pose.Pose(
+    static_image_mode=False,
+    model_complexity=0,
+    smooth_landmarks=True,
+    min_detection_confidence=0.5,
+    min_tracking_confidence=0.5
+)
 mp_draw = mp.solutions.drawing_utils
 
 

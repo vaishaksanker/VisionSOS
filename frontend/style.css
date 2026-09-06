@@ -1,1 +1,778 @@
-/* frontend/style.css */
+/* ============================================================
+   VISION SOS - GLOBAL
+   ============================================================ */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    background: #070a0f;
+    color: #f4f7fb;
+
+    min-height: 100vh;
+}
+
+
+/* ============================================================
+   MAIN CONTAINER
+   ============================================================ */
+
+.container {
+    width: min(1400px, 92%);
+    margin: 0 auto;
+    padding: 35px 0 25px;
+}
+
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    margin-bottom: 35px;
+}
+
+.header h1 {
+    font-size: 42px;
+    font-weight: 800;
+    letter-spacing: -1.5px;
+}
+
+.header h1 span {
+    color: #ff3040;
+}
+
+.header p {
+    margin-top: 5px;
+
+    color: #8fa0bf;
+
+    font-size: 17px;
+}
+
+
+/* ============================================================
+   SYSTEM BADGE
+   ============================================================ */
+
+.system-badge {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+
+    padding: 11px 18px;
+
+    border-radius: 30px;
+
+    background: #101722;
+
+    color: #8fa0bf;
+
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.system-badge.active {
+    background: #0b2d1c;
+    color: #29f276;
+}
+
+.system-badge .dot {
+    width: 8px;
+    height: 8px;
+
+    border-radius: 50%;
+
+    background: currentColor;
+}
+
+
+/* ============================================================
+   STATUS CARD
+   ============================================================ */
+
+.status-card {
+    display: flex;
+    align-items: center;
+
+    gap: 25px;
+
+    padding: 32px;
+
+    margin-bottom: 25px;
+
+    background: #10151f;
+
+    border: 1px solid #202b3b;
+
+    border-radius: 20px;
+
+    transition:
+        border-color 0.3s ease,
+        box-shadow 0.3s ease,
+        background 0.3s ease;
+}
+
+
+/* NORMAL */
+
+.status-card.normal {
+    border-color: #202b3b;
+}
+
+
+/* WARNING */
+
+.status-card.warning {
+    border-color: #d6a900;
+
+    background: #15150f;
+
+    box-shadow:
+        0 0 25px rgba(255, 212, 59, 0.08);
+}
+
+
+/* EMERGENCY */
+
+.status-card.emergency {
+    border-color: #ff3040;
+
+    background: #1b0d11;
+
+    box-shadow:
+        0 0 35px rgba(255, 48, 64, 0.18);
+
+    animation: emergencyCardPulse 1s infinite;
+}
+
+
+/* ============================================================
+   STATUS ICON
+   ============================================================ */
+
+.status-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    width: 70px;
+    height: 70px;
+
+    border-radius: 50%;
+
+    background: #0b3a22;
+
+    color: #2af477;
+
+    font-size: 38px;
+    font-weight: 700;
+}
+
+.status-card.warning .status-icon {
+    background: #3c3105;
+    color: #ffd43b;
+}
+
+.status-card.emergency .status-icon {
+    background: #4a1018;
+    color: #ff4050;
+}
+
+
+/* ============================================================
+   STATUS CONTENT
+   ============================================================ */
+
+.status-content {
+    flex: 1;
+}
+
+.status-label {
+    margin-bottom: 7px;
+
+    color: #8fa0bf;
+
+    font-size: 13px;
+
+    letter-spacing: 2px;
+}
+
+.current-status {
+    font-size: 28px;
+    font-weight: 800;
+}
+
+.status-description {
+    margin-top: 5px;
+
+    color: #8fa0bf;
+
+    font-size: 16px;
+}
+
+
+/* ============================================================
+   MAIN GRID
+   ============================================================ */
+
+.monitoring-card {
+    margin-bottom: 25px;
+
+    padding: 24px;
+
+    background: #10151f;
+
+    border: 1px solid #202b3b;
+
+    border-radius: 20px;
+}
+
+
+/* ============================================================
+   SECTION HEADER
+   ============================================================ */
+
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 18px;
+}
+
+.section-header h2,
+.event-card h2 {
+    font-size: 17px;
+    font-weight: 800;
+
+    letter-spacing: 0.5px;
+}
+
+
+/* ============================================================
+   LIVE INDICATOR
+   ============================================================ */
+
+.live-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    color: #29f276;
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.live-indicator .dot {
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: #29f276;
+
+    animation: livePulse 1.5s infinite;
+}
+
+
+/* ============================================================
+   CAMERA
+   ============================================================ */
+
+.camera-container {
+    position: relative;
+
+    width: 100%;
+    height: 500px;
+
+    overflow: hidden;
+
+    border-radius: 14px;
+
+    background: #05070b;
+
+    border: 1px solid #273044;
+}
+
+
+/* ACTUAL CAMERA IMAGE */
+
+#live-camera {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+
+    background: #05070b;
+}
+
+
+/* ============================================================
+   CAMERA PLACEHOLDER
+   ============================================================ */
+
+.camera-placeholder {
+    position: absolute;
+
+    inset: 0;
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    flex-direction: column;
+
+    text-align: center;
+
+    color: #71809d;
+
+    font-size: 18px;
+}
+
+.camera-placeholder small {
+    margin-top: 8px;
+
+    color: #52617d;
+
+    font-size: 14px;
+}
+
+.camera-icon {
+    margin-bottom: 15px;
+
+    font-size: 40px;
+}
+
+
+/* ============================================================
+   CAMERA STATUS OVERLAY
+   ============================================================ */
+
+.camera-overlay {
+    position: absolute;
+
+    top: 15px;
+    left: 15px;
+
+    z-index: 5;
+
+    padding: 9px 15px;
+
+    border-radius: 7px;
+
+    background: rgba(0, 0, 0, 0.72);
+
+    color: #29f276;
+
+    font-size: 14px;
+    font-weight: 800;
+
+    letter-spacing: 0.5px;
+
+    backdrop-filter: blur(5px);
+}
+
+.camera-overlay.warning {
+    color: #ffd43b;
+
+    background: rgba(45, 37, 0, 0.85);
+}
+
+.camera-overlay.emergency {
+    color: #ff4050;
+
+    background: rgba(80, 0, 10, 0.9);
+
+    animation: emergencyPulse 1s infinite;
+}
+
+
+/* ============================================================
+   LATEST EVENT
+   ============================================================ */
+
+.event-card {
+    margin-bottom: 25px;
+
+    padding: 24px;
+
+    min-height: 260px;
+
+    background: #10151f;
+
+    border: 1px solid #202b3b;
+
+    border-radius: 20px;
+}
+
+.event-card h2 {
+    margin-bottom: 25px;
+}
+
+
+/* ============================================================
+   NO EVENT
+   ============================================================ */
+
+.no-event {
+    min-height: 160px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #71809d;
+
+    font-size: 16px;
+}
+
+
+/* ============================================================
+   EVENT DETAILS
+   ============================================================ */
+
+.event-details {
+    display: flex;
+    flex-direction: column;
+
+    gap: 25px;
+}
+
+.event-title {
+    font-size: 26px;
+    font-weight: 800;
+
+    color: #f5f7fa;
+}
+
+.event-info {
+    max-width: 600px;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+
+    padding: 11px 0;
+
+    border-bottom: 1px solid #202b3b;
+}
+
+.info-row span {
+    color: #8fa0bf;
+}
+
+.info-row strong {
+    color: #f4f7fb;
+}
+
+
+/* ============================================================
+   EVENT HISTORY
+   ============================================================ */
+
+.history-card {
+    padding: 24px;
+
+    background: #10151f;
+
+    border: 1px solid #202b3b;
+
+    border-radius: 20px;
+}
+
+.event-count {
+    color: #71809d;
+
+    font-size: 13px;
+}
+
+
+/* ============================================================
+   HISTORY ROW
+   ============================================================ */
+
+.history-row {
+    display: grid;
+
+    grid-template-columns:
+        1.5fr
+        1fr
+        1fr
+        1.5fr;
+
+    align-items: center;
+
+    gap: 15px;
+
+    padding: 17px 10px;
+
+    border-bottom: 1px solid #202b3b;
+}
+
+.history-row:last-child {
+    border-bottom: none;
+}
+
+.history-type {
+    font-weight: 700;
+}
+
+.history-severity {
+    font-weight: 800;
+}
+
+.history-score {
+    color: #8fa0bf;
+}
+
+.history-time {
+    color: #71809d;
+
+    text-align: right;
+
+    font-size: 14px;
+}
+
+
+/* ============================================================
+   SEVERITY COLORS
+   ============================================================ */
+
+.severity-low {
+    color: #29f276;
+}
+
+.severity-medium {
+    color: #ffd43b;
+}
+
+.severity-high {
+    color: #ff9f43;
+}
+
+.severity-critical {
+    color: #ff3040;
+}
+
+
+/* ============================================================
+   EMPTY HISTORY
+   ============================================================ */
+
+.empty-history {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 100px;
+
+    color: #71809d;
+}
+
+
+/* ============================================================
+   HIDDEN
+   ============================================================ */
+
+.hidden {
+    display: none !important;
+}
+
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+
+footer {
+    padding: 28px 0 10px;
+
+    text-align: center;
+
+    color: #52617d;
+
+    font-size: 13px;
+}
+
+
+/* ============================================================
+   ANIMATIONS
+   ============================================================ */
+
+@keyframes livePulse {
+
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.4;
+        transform: scale(0.8);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+
+@keyframes emergencyPulse {
+
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.45;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+
+@keyframes emergencyCardPulse {
+
+    0% {
+        box-shadow:
+            0 0 0 rgba(255, 48, 64, 0);
+    }
+
+    50% {
+        box-shadow:
+            0 0 35px rgba(255, 48, 64, 0.25);
+    }
+
+    100% {
+        box-shadow:
+            0 0 0 rgba(255, 48, 64, 0);
+    }
+}
+
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 900px) {
+
+    .container {
+        width: 94%;
+    }
+
+    .header {
+        flex-direction: column;
+
+        gap: 20px;
+    }
+
+    .header h1 {
+        font-size: 36px;
+    }
+
+    .camera-container {
+        height: 400px;
+    }
+
+    .history-row {
+        grid-template-columns:
+            1.5fr
+            1fr
+            1fr;
+    }
+
+    .history-time {
+        display: none;
+    }
+}
+
+
+@media (max-width: 600px) {
+
+    .container {
+        width: 94%;
+        padding-top: 20px;
+    }
+
+    .header h1 {
+        font-size: 32px;
+    }
+
+    .header p {
+        font-size: 14px;
+    }
+
+    .status-card {
+        padding: 22px;
+
+        gap: 15px;
+    }
+
+    .status-icon {
+        width: 55px;
+        height: 55px;
+
+        font-size: 28px;
+    }
+
+    .current-status {
+        font-size: 22px;
+    }
+
+    .status-description {
+        font-size: 14px;
+    }
+
+    .monitoring-card,
+    .event-card,
+    .history-card {
+        padding: 18px;
+    }
+
+    .camera-container {
+        height: 300px;
+    }
+
+    .history-row {
+        grid-template-columns:
+            1.3fr
+            1fr
+            1fr;
+
+        gap: 8px;
+
+        font-size: 13px;
+    }
+
+    .history-time {
+        display: none;
+    }
+
+    .event-title {
+        font-size: 21px;
+    }
+}
